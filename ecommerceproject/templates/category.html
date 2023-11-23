@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+  {% if category %}
+     {{ category.description|truncatewords:180 }}
+  {% else %}
+      Welcome to Neha's pvt ltd.
+  {% endif %}
+{% endblock %}
+{% block title %}
+
+     {{category.name}} - Neha's Store
+
+
+
+{% endblock %}
+{% block content %}
+   {% if category %}
+     <div>
+        <div class="row my_row_class">
+            <div class="mx-auto">
+                <p><a href="{% url 'ecommerceapp:allProductCat'%}">Our Products</a> | <a href="{{product.category.get_url }}">{{ product.category}}</a> | {{product.name}}</p>
+            </div>
+        </div>
+     </div>
+
+    <div class="mx_auto">
+      <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}">
+    </div><br>
+    <div>
+      <h1 class="text-center my_title">{{category.name}}</h1>
+      <p class="text-justify">{{category.description}}</p>
+    </div>
+   {% else %}
+    <div>
+        <center><img class="my_image my_image_padding" src="{% static 'image/banner.png' %}" alt="Banner Image"></center>
+    </div><br>
+    <div>
+      <h1 class="text-center">Our Products Collections </h1>
+      <p class="text-justify"><b>Discover the Latest Trends in Fashion for Everyone!</b><br>
+      Welcome to our online clothing store, your one-stop destination for the latest fashion trends. We believe that fashion knows no boundaries, and our collections cater to both men and women, offering a diverse range of styles, sizes, and designs.</p>
+      <ul>
+        <li>Quality Craftsmanship: Our products are carefully crafted with attention to detail and quality in mind.</li>
+        <li>Latest Trends: Stay ahead of the fashion curve with our ever-evolving collection of clothing.</li>
+        <li>Easy Shopping: Enjoy a hassle-free shopping experience, with secure payments and fast shipping.</li>
+        <li>Size Inclusivity: Find clothing that fits you perfectly, with a wide range of sizes available for all.</li>
+      </ul>
+    </div>
+   {% endif %}
+    <div class="container">
+      <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="my_buttom_margin col-9 col-sm-12  col-md-4 col-lg-4">
+          <div class="card text-center" style="min-width:17rem;">
+            {% if product.image %}
+             <center><a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{ product.image.url }}" alt="{{ product.name }}"></a></center>
+            {% endif %}
+            <div class="text-center">
+              <h4>{{product.name}}</h4><br>
+                <p>{{product.price}}</p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+        <div class="mx-auto">
+            {% if products.paginator.num_pages > 1 %}
+
+            <hr>
+            <div class="text-center">
+                {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.numer == pg %} active {% endif %}">{{pg}}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <br>
+    </div>
+{% endblock %}
